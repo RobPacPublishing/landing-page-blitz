@@ -18,7 +18,7 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
 // Lista di email autorizzate come admin
-const adminEmails = ["TUA_EMAIL@gmail.com"];  // Sostituisci con il tuo indirizzo email
+const adminEmails = ["robpacpublishing@gmail.com"];  // Sostituisci con il tuo indirizzo email
 
 // Funzione di login con Google
 function login() {
