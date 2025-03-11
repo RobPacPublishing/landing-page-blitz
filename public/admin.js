@@ -18,35 +18,39 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
 // Lista di email autorizzate come admin
-const adminEmails = ["robpacpublishing@gmail.com"];  // Sostituisci con il tuo indirizzo email
+const adminEmails = ["robpacpublishing@gmail.com"]; // Sostituisci con la tua email admin
 
-// Funzione per verificare lo stato dell'utente
-function checkAuthState() {
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("Utente già autenticato:", user.email);
-
-            if (adminEmails.includes(user.email)) {
-                document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('loginButton').classList.add('hidden');
-            } else {
-                console.warn("Accesso negato per:", user.email);
-                alert("Non sei autorizzato ad accedere all'area admin.");
-                logout();  // Se non è admin, disconnette subito l'utente
-            }
+// Controlla se l'utente è già autenticato all'avvio
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("Utente già autenticato:", user.email);
+        if (adminEmails.includes(user.email)) {
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('loginButton').classList.add('hidden');
         } else {
-            console.log("Nessun utente autenticato");
-            document.getElementById('loginButton').classList.remove('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
+            console.warn("Accesso negato per:", user.email);
+            alert("Non sei autorizzato ad accedere all'area admin.");
+            logout();
         }
-    });
-}
+    } else {
+        console.log("Nessun utente autenticato");
+    }
+});
 
 // Funzione di login con Google
 function login() {
     signInWithPopup(auth, provider)
         .then((result) => {
-            console.log("Login effettuato:", result.user.email);
+            const user = result.user;
+            if (adminEmails.includes(user.email)) {
+                console.log("Accesso Admin riuscito:", user.email);
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('loginButton').classList.add('hidden');
+            } else {
+                console.warn("Accesso negato per:", user.email);
+                alert("Non sei autorizzato ad accedere all'area admin.");
+                logout();
+            }
         })
         .catch((error) => {
             console.error("Errore di login:", error);
@@ -58,6 +62,8 @@ function login() {
 function logout() {
     signOut(auth).then(() => {
         console.log("Logout effettuato");
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('loginButton').classList.remove('hidden');
     }).catch((error) => {
         console.error("Errore di logout:", error);
     });
@@ -66,6 +72,3 @@ function logout() {
 // Collega le funzioni ai bottoni
 document.getElementById('loginButton').addEventListener('click', login);
 document.getElementById('logoutButton').addEventListener('click', logout);
-
-// Controlla lo stato di autenticazione all'avvio
-checkAuthState();
