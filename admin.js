@@ -3,14 +3,41 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
 // Configurazione Firebase (sostituisci con il tuo codice)
-const firebaseConfig = {
-    apiKey: "TUA_API_KEY",
-    authDomain: "TUA_AUTH_DOMAIN",
-    projectId: "TUA_PROJECT_ID",
-    storageBucket: "TUA_STORAGE_BUCKET",
-    messagingSenderId: "TUA_MESSAGING_SENDER_ID",
-    appId: "TUA_APP_ID"
-};
+<script type="module">
+
+  // Import the functions you need from the SDKs you need
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+
+  // Your web app's Firebase configuration
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyDMIQ2mNryPdNMOPb6MtY8Qb62styvie54",
+
+    authDomain: "adminlogin-352a2.firebaseapp.com",
+
+    projectId: "adminlogin-352a2",
+
+    storageBucket: "adminlogin-352a2.firebasestorage.app",
+
+    messagingSenderId: "1057661852147",
+
+    appId: "1:1057661852147:web:4536d9a36ad1dd5c7c9a86"
+
+  };
+
+
+  // Initialize Firebase
+
+  const app = initializeApp(firebaseConfig);
+
+</script>
 
 // Inizializza Firebase
 const app = initializeApp(firebaseConfig);
