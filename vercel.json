@@ -1,4 +1,10 @@
 {
-  "version": 2,
-  "public": true
+  "routes": [
+    {
+      "src": "/(.*)\\.js",
+      "headers": {
+        "Content-Type": "application/javascript"
+      }
+    }
+  ]
 }
