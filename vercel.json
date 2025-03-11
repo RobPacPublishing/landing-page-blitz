@@ -1,10 +1,13 @@
 {
-  "routes": [
+  "headers": [
     {
-      "src": "/(.*)\\.js",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
+      "source": "/admin.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
     }
   ]
 }
