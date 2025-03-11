@@ -20,21 +20,33 @@ const provider = new GoogleAuthProvider();
 // Lista di email autorizzate come admin
 const adminEmails = ["robpacpublishing@gmail.com"];  // Sostituisci con il tuo indirizzo email
 
+// Funzione per verificare lo stato dell'utente
+function checkAuthState() {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Utente già autenticato:", user.email);
+
+            if (adminEmails.includes(user.email)) {
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('loginButton').classList.add('hidden');
+            } else {
+                console.warn("Accesso negato per:", user.email);
+                alert("Non sei autorizzato ad accedere all'area admin.");
+                logout();  // Se non è admin, disconnette subito l'utente
+            }
+        } else {
+            console.log("Nessun utente autenticato");
+            document.getElementById('loginButton').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+        }
+    });
+}
+
 // Funzione di login con Google
 function login() {
     signInWithPopup(auth, provider)
         .then((result) => {
-            const user = result.user;
-
-            // Controlla se l'utente è un admin autorizzato
-            if (adminEmails.includes(user.email)) {
-                console.log("Accesso Admin riuscito:", user.email);
-                showAdminPanel();
-            } else {
-                console.warn("Accesso negato per:", user.email);
-                alert("Non sei autorizzato ad accedere all'area admin.");
-                logout();
-            }
+            console.log("Login effettuato:", result.user.email);
         })
         .catch((error) => {
             console.error("Errore di login:", error);
@@ -46,40 +58,14 @@ function login() {
 function logout() {
     signOut(auth).then(() => {
         console.log("Logout effettuato");
-        showLoginButton();
     }).catch((error) => {
         console.error("Errore di logout:", error);
     });
-}
-
-// Ascolta i cambiamenti di autenticazione
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        if (adminEmails.includes(user.email)) {
-            console.log("Utente già autenticato:", user.email);
-            showAdminPanel();
-        } else {
-            console.warn("Utente non autorizzato:", user.email);
-            logout();
-        }
-    } else {
-        showLoginButton();
-    }
-});
-
-// Mostra il pannello admin e nasconde il bottone di login
-function showAdminPanel() {
-    document.getElementById('adminPanel').classList.remove('hidden');
-    document.getElementById('loginButton').classList.add('hidden');
-}
-
-// Mostra il bottone di login e nasconde il pannello admin
-function showLoginButton() {
-    document.getElementById('adminPanel').classList.add('hidden');
-    document.getElementById('loginButton').classList.remove('hidden');
 }
 
 // Collega le funzioni ai bottoni
 document.getElementById('loginButton').addEventListener('click', login);
 document.getElementById('logoutButton').addEventListener('click', logout);
 
+// Controlla lo stato di autenticazione all'avvio
+checkAuthState();
