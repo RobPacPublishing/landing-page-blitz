@@ -1,119 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RobPac Publishing</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Landing Page Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        #loginButton, #logoutButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #adminPanel {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <!-- Admin Login Modal -->
-    <div id="adminLoginModal" class="modal">
-        <div class="modal-content">
-            <h2>Admin Login</h2>
-            <input type="password" id="adminPassword" placeholder="Enter password">
-            <button onclick="login()">Login</button>
-        </div>
+
+    <h1>Benvenuto sulla Landing Page</h1>
+    
+    <button id="loginButton">Accedi con Google</button>
+
+    <div id="adminPanel" class="hidden">
+        <h2>Pannello Admin</h2>
+        <p>Benvenuto, hai accesso all'area riservata.</p>
+        <button id="logoutButton">Logout</button>
     </div>
 
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="admin-panel hidden">
-        <div class="admin-header">
-            <h2>Admin Panel</h2>
-            <button onclick="toggleAdminPanel(false)">Close</button>
-        </div>
-        <div class="admin-sections">
-            <section>
-                <h3>General Settings</h3>
-                <div class="setting-group">
-                    <label>Logo:</label>
-                    <input type="file" id="logoUpload" accept="image/*">
-                </div>
-                <div class="setting-group">
-                    <label>Banner:</label>
-                    <input type="file" id="bannerUpload" accept="image/*">
-                </div>
-                <div class="setting-group">
-                    <label>Slogan:</label>
-                    <input type="text" id="sloganText">
-                </div>
-                <div class="setting-group">
-                    <label>Font Family:</label>
-                    <select id="fontFamily">
-                        <option value="Montserrat">Montserrat</option>
-                        <option value="Poppins">Poppins</option>
-                        <option value="Roboto">Roboto</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <label>Primary Color:</label>
-                    <input type="color" id="primaryColor">
-                </div>
-            </section>
+    <script type="module" src="admin.js"></script>
 
-            <section>
-                <h3>Book Management</h3>
-                <div class="book-form">
-                    <input type="file" id="bookCover" accept="image/*">
-                    <input type="text" id="bookTitle" placeholder="Book Title">
-                    <textarea id="bookDescription" placeholder="Book Description"></textarea>
-                    <input type="text" id="amazonLink" placeholder="Amazon Link">
-                    <select id="bookCategory">
-                        <option value="">Select Category</option>
-                    </select>
-                    <button onclick="addBook()">Add Book</button>
-                </div>
-                <div class="category-management">
-                    <input type="text" id="newCategory" placeholder="New Category">
-                    <button onclick="addCategory()">Add Category</button>
-                </div>
-            </section>
-
-            <section>
-                <h3>Footer Settings</h3>
-                <textarea id="footerText" placeholder="Footer Content"></textarea>
-                <button onclick="updateFooter()">Update Footer</button>
-            </section>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <nav id="mainNav">
-        <div class="logo-container">
-            <img id="siteLogo" src="default-logo.png" alt="RobPac Publishing">
-        </div>
-        <div class="nav-links">
-            <a href="#hero">Home</a>
-            <a href="#books">Books</a>
-            <button id="adminButton" onclick="showAdminLogin()">Admin</button>
-        </div>
-    </nav>
-
-    <section id="hero">
-        <div class="banner-container">
-            <img id="heroBanner" src="default-banner.jpg" alt="Welcome to RobPac Publishing">
-        </div>
-        <h1 id="heroSlogan">Welcome to RobPac Publishing</h1>
-    </section>
-
-    <section id="books">
-        <div class="category-filter">
-            <select id="categoryFilter" onchange="filterBooks()">
-                <option value="">All Categories</option>
-            </select>
-        </div>
-        <div class="book-grid" id="bookGrid">
-            <!-- Books will be dynamically added here -->
-        </div>
-    </section>
-
-    <footer id="siteFooter">
-        <p>© 2024 RobPac Publishing. All rights reserved.</p>
-    </footer>
-
-    <script src="admin.js"></script>
-    <script src="main.js"></script>
 </body>
 </html>

@@ -1,145 +1,59 @@
-// Admin Authentication
-const ADMIN_PASSWORD = 'admin123'; // In production, use a more secure method
-let isAdmin = false;
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-function showAdminLogin() {
-    document.getElementById('adminLoginModal').style.display = 'block';
-}
+// Configurazione Firebase (sostituisci con il tuo codice)
+const firebaseConfig = {
+    apiKey: "TUA_API_KEY",
+    authDomain: "TUA_AUTH_DOMAIN",
+    projectId: "TUA_PROJECT_ID",
+    storageBucket: "TUA_STORAGE_BUCKET",
+    messagingSenderId: "TUA_MESSAGING_SENDER_ID",
+    appId: "TUA_APP_ID"
+};
 
+// Inizializza Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
+
+// Lista di email autorizzate come admin
+const adminEmails = ["TUA_EMAIL@gmail.com"];  // Sostituisci con il tuo indirizzo email
+
+// Funzione di login con Google
 function login() {
-    const password = document.getElementById('adminPassword').value;
-    if (password === ADMIN_PASSWORD) {
-        isAdmin = true;
-        document.getElementById('adminLoginModal').style.display = 'none';
-        toggleAdminPanel(true);
-        loadAdminSettings();
-    } else {
-        alert('Invalid password');
-    }
-}
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
 
-function toggleAdminPanel(show) {
-    document.getElementById('adminPanel').classList.toggle('hidden', !show);
-}
-
-// File Handling with Image Compression
-function handleFileUpload(file, callback, maxWidth = 800) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-
-            // Calculate new dimensions while maintaining aspect ratio
-            if (width > maxWidth) {
-                height = Math.round((height * maxWidth) / width);
-                width = maxWidth;
+            // Controlla se l'utente è un admin autorizzato
+            if (adminEmails.includes(user.email)) {
+                console.log("Accesso Admin riuscito:", user.email);
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('loginButton').classList.add('hidden');
+            } else {
+                console.warn("Accesso negato per:", user.email);
+                alert("Non sei autorizzato ad accedere all'area admin.");
+                logout();  // Se non è admin, disconnette subito l'utente
             }
-
-            canvas.width = width;
-            canvas.height = height;
-
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-
-            // Compress image to JPEG with reduced quality
-            const compressedImage = canvas.toDataURL('image/jpeg', 0.7);
-            callback(compressedImage);
-        };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+        })
+        .catch((error) => {
+            console.error("Errore di login:", error);
+            alert("Errore durante il login!");
+        });
 }
 
-// Settings Management with Storage Optimization
-function loadAdminSettings() {
-    const settings = JSON.parse(localStorage.getItem('adminSettings') || '{}');
-    
-    if (settings.logo) document.getElementById('siteLogo').src = settings.logo;
-    if (settings.banner) document.getElementById('heroBanner').src = settings.banner;
-    if (settings.slogan) {
-        document.getElementById('heroSlogan').textContent = settings.slogan;
-        document.getElementById('sloganText').value = settings.slogan;
-    }
-    if (settings.fontFamily) {
-        document.documentElement.style.setProperty('--font-family', settings.fontFamily);
-        document.getElementById('fontFamily').value = settings.fontFamily;
-    }
-    if (settings.primaryColor) {
-        document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
-        document.getElementById('primaryColor').value = settings.primaryColor;
-    }
-    if (settings.footerText) {
-        document.getElementById('siteFooter').innerHTML = settings.footerText;
-        document.getElementById('footerText').value = settings.footerText;
-    }
+// Funzione di logout
+function logout() {
+    signOut(auth).then(() => {
+        console.log("Logout effettuato");
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('loginButton').classList.remove('hidden');
+    }).catch((error) => {
+        console.error("Errore di logout:", error);
+    });
 }
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Logo Upload
-    document.getElementById('logoUpload').addEventListener('change', (e) => {
-        if (e.target.files[0]) {
-            handleFileUpload(e.target.files[0], (result) => {
-                document.getElementById('siteLogo').src = result;
-                saveSettings('logo', result);
-            }, 400); // Smaller max width for logo
-        }
-    });
-
-    // Banner Upload
-    document.getElementById('bannerUpload').addEventListener('change', (e) => {
-        if (e.target.files[0]) {
-            handleFileUpload(e.target.files[0], (result) => {
-                document.getElementById('heroBanner').src = result;
-                saveSettings('banner', result);
-            }, 1200); // Larger max width for banner
-        }
-    });
-
-    // Slogan Update
-    document.getElementById('sloganText').addEventListener('change', (e) => {
-        const slogan = e.target.value;
-        document.getElementById('heroSlogan').textContent = slogan;
-        saveSettings('slogan', slogan);
-    });
-
-    // Font Family Update
-    document.getElementById('fontFamily').addEventListener('change', (e) => {
-        const fontFamily = e.target.value;
-        document.documentElement.style.setProperty('--font-family', fontFamily);
-        saveSettings('fontFamily', fontFamily);
-    });
-
-    // Color Update
-    document.getElementById('primaryColor').addEventListener('change', (e) => {
-        const color = e.target.value;
-        document.documentElement.style.setProperty('--primary-color', color);
-        saveSettings('primaryColor', color);
-    });
-
-    // Load initial settings
-    loadAdminSettings();
-});
-
-function saveSettings(key, value) {
-    try {
-        const settings = JSON.parse(localStorage.getItem('adminSettings') || '{}');
-        settings[key] = value;
-        localStorage.setItem('adminSettings', JSON.stringify(settings));
-    } catch (error) {
-        if (error.name === 'QuotaExceededError') {
-            alert('Storage limit reached. Try removing some books or using smaller images.');
-        } else {
-            console.error('Error saving settings:', error);
-        }
-    }
-}
-
-function updateFooter() {
-    const footerText = document.getElementById('footerText').value;
-    document.getElementById('siteFooter').innerHTML = footerText;
-    saveSettings('footerText', footerText);
-}
+// Collega le funzioni ai bottoni
+document.getElementById('loginButton').addEventListener('click', login);
+document.getElementById('logoutButton').addEventListener('click', logout);
