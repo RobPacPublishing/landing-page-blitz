@@ -22,11 +22,14 @@ const adminEmails = ["robpacpublishing@gmail.com"]; // Sostituisci con la tua em
 
 // Controlla se l'utente è già autenticato all'avvio
 onAuthStateChanged(auth, (user) => {
+    const loginButton = document.getElementById('loginButton');
+    const adminPanel = document.getElementById('adminPanel');
+
     if (user) {
         console.log("Utente già autenticato:", user.email);
         if (adminEmails.includes(user.email)) {
-            document.getElementById('adminPanel').classList.remove('hidden');
-            document.getElementById('loginButton').classList.add('hidden');
+            adminPanel.classList.remove('hidden');
+            loginButton.classList.add('hidden');
         } else {
             console.warn("Accesso negato per:", user.email);
             alert("Non sei autorizzato ad accedere all'area admin.");
@@ -34,6 +37,7 @@ onAuthStateChanged(auth, (user) => {
         }
     } else {
         console.log("Nessun utente autenticato");
+        loginButton.classList.remove('hidden');  // Mostra il bottone di login se nessun utente è autenticato
     }
 });
 
