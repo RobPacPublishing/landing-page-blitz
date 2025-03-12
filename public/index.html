@@ -61,12 +61,14 @@
     <script type="module" src="/admin.js"></script>
 
     <script>
+        // Rimozione forzata di script Next.js caricati automaticamente
         document.querySelectorAll("script").forEach(s => {
             if (s.src.includes("_next") || s.src.includes("next/static")) {
                 s.remove();
             }
         });
 
+        // Disattivazione dati Next.js iniettati automaticamente
         window.__NEXT_DATA__ = undefined;
         window.__NEXT_LOADED_PAGES__ = undefined;
         window.__NEXT_LOADED_CHUNKS__ = undefined;
