@@ -4,41 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page Admin</title>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
         }
-        .hidden {
-            display: none;
-        }
-        #loginButton, #logoutButton {
+        #google-login, #logout-btn {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
             margin-top: 20px;
         }
-        #adminPanel {
-            margin-top: 30px;
+        #admin-panel {
+            margin: 30px auto;
             padding: 20px;
+            max-width: 600px;
             border: 1px solid #ccc;
             display: none;
         }
     </style>
 </head>
 <body>
-
     <h1>Benvenuto sulla Landing Page</h1>
     
-    <button id="loginButton">Accedi con Google</button>
+    <button id="google-login">Accedi con Google</button>
 
-    <div id="adminPanel" class="hidden">
+    <div id="admin-panel">
         <h2>Pannello Admin</h2>
         <p>Benvenuto, hai accesso all'area riservata.</p>
-        <button id="logoutButton">Logout</button>
+        <button id="logout-btn">Logout</button>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "TUO_API_KEY",
+            authDomain: "TUO_AUTH_DOMAIN",
+            projectId: "TUO_PROJECT_ID",
+            storageBucket: "TUO_STORAGE_BUCKET",
+            messagingSenderId: "TUO_SENDER_ID",
+            appId: "TUO_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+    </script>
+    
     <script type="module" src="/admin.js"></script>
+
+    <script>
+        document.querySelectorAll("script").forEach(s => {
+            if (s.src.includes("_next") || s.src.includes("next/static")) {
+                s.remove();
+            }
+        });
+
+        window.__NEXT_DATA__ = undefined;
+        window.__NEXT_LOADED_PAGES__ = undefined;
+        window.__NEXT_LOADED_CHUNKS__ = undefined;
+    </script>
 </body>
 </html>

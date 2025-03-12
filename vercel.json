@@ -12,5 +12,12 @@
   ],
   "cleanUrls": true,
   "trailingSlash": false,
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "redirects": [
+    {
+      "source": "/_next/*",
+      "destination": "/",
+      "statusCode": 404
+    }
+  ]
 }
