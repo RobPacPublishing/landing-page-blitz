@@ -18,26 +18,24 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
 // Lista di email autorizzate come admin
-const adminEmails = ["robpacpublishing@gmail.com"]; // Sostituisci con la tua email admin
+const adminEmails = ["robpacpublishing@gmail.com"];  // Sostituisci con il tuo indirizzo email
 
-// Controlla se l'utente è già autenticato all'avvio
+// Controlla lo stato di autenticazione all'avvio
 onAuthStateChanged(auth, (user) => {
-    const loginButton = document.getElementById('loginButton');
-    const adminPanel = document.getElementById('adminPanel');
-
     if (user) {
-        console.log("Utente già autenticato:", user.email);
+        console.log("Utente autenticato:", user.email);
         if (adminEmails.includes(user.email)) {
-            adminPanel.classList.remove('hidden');
-            loginButton.classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('loginButton').classList.add('hidden');
         } else {
             console.warn("Accesso negato per:", user.email);
             alert("Non sei autorizzato ad accedere all'area admin.");
-            logout();
+            logout();  // Se non è admin, disconnette subito l'utente
         }
     } else {
         console.log("Nessun utente autenticato");
-        loginButton.classList.remove('hidden');  // Mostra il bottone di login se nessun utente è autenticato
+        document.getElementById('loginButton').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.add('hidden');
     }
 });
 
@@ -46,6 +44,8 @@ function login() {
     signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
+
+            // Controlla se l'utente è un admin autorizzato
             if (adminEmails.includes(user.email)) {
                 console.log("Accesso Admin riuscito:", user.email);
                 document.getElementById('adminPanel').classList.remove('hidden');
@@ -53,7 +53,7 @@ function login() {
             } else {
                 console.warn("Accesso negato per:", user.email);
                 alert("Non sei autorizzato ad accedere all'area admin.");
-                logout();
+                logout();  // Se non è admin, disconnette subito l'utente
             }
         })
         .catch((error) => {
@@ -76,3 +76,4 @@ function logout() {
 // Collega le funzioni ai bottoni
 document.getElementById('loginButton').addEventListener('click', login);
 document.getElementById('logoutButton').addEventListener('click', logout);
+
