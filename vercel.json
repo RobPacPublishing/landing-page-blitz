@@ -1,4 +1,7 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "outputDirectory": "public",
   "headers": [
     {
       "source": "/admin.js",
@@ -8,31 +11,33 @@
           "value": "application/javascript"
         }
       ]
-    }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "outputDirectory": "public",
-  "redirects": [
-    {
-      "source": "/_next/(.*)",
-      "destination": "/",
-      "statusCode": 404
-    }
-  ],
-  "headers": [
+    },
     {
       "source": "/(.*)",
       "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
         }
       ]
     }
-  ]
-}
+  ],
+  "redirects": [
+    {
+      "source": "/_next/static/(.*)",
+      "destination": "/",
+      "statusCode": 404
+    },
+    {
+      "source": "/_next/(.*)",
+      "destination": "/",
+      "statusCode": 404
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/",
+      "statusCode": 404
+    },
+    {
+      "source": "/insights/(.*)",
+      "destination":
