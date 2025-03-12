@@ -15,7 +15,7 @@
   "outputDirectory": "public",
   "redirects": [
     {
-      "source": "/_next/*",
+      "source": "/_next/(.*)",
       "destination": "/",
       "statusCode": 404
     }
