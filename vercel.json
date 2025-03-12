@@ -1,7 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "outputDirectory": "public",
   "headers": [
     {
       "source": "/admin.js",
@@ -44,4 +43,9 @@
       "statusCode": 404
     },
     {
-      "
+      "source": "/stream/external/(.*)",
+      "destination": "/",
+      "statusCode": 404
+    }
+  ]
+}
