@@ -40,4 +40,8 @@
     },
     {
       "source": "/insights/(.*)",
-      "destination":
+      "destination": "/",
+      "statusCode": 404
+    },
+    {
+      "
