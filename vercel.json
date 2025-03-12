@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Type",
-          "value": "text/javascript; charset=UTF-8"
+          "value": "application/javascript"
         }
       ]
     }
